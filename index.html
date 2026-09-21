@@ -3,18 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodTracker</title>
-    <!-- Connect Stylesheet -->
+    <title>Fitbees — Fuel Better, Live Higher</title>
+    <meta name="description" content="Personalized nutrition insights for students aged 18-22 to manage diet, boost daily energy, and build fitness.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- 
-      FoodTracker: Prototype for students living away from home
-      Purpose: Manage diet, meals, calories, protein intake, and junk-food consumption
-      Frontend HTML structure will be developed here.
-    -->
+    <!-- Decorative Corner Leaves -->
+    <div class="corner-leaf leaf-top-right" aria-hidden="true">
+        <svg viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M260 0C190 20 130 80 120 150C160 140 210 110 260 0Z" fill="url(#leafGrad1)" opacity="0.85" filter="blur(1.5px)"/>
+            <path d="M260 60C200 80 150 140 160 210C195 190 235 150 260 60Z" fill="url(#leafGrad2)" opacity="0.7" filter="blur(3px)"/>
+            <path d="M210 0C160 30 110 90 90 160C130 140 180 100 210 0Z" fill="url(#leafGrad3)" opacity="0.6" filter="blur(4px)"/>
+            <defs>
+                <linearGradient id="leafGrad1" x1="120" y1="150" x2="260" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#1b3f27"/>
+                    <stop offset="0.6" stop-color="#346842"/>
+                    <stop offset="1" stop-color="#558e65"/>
+                </linearGradient>
+                <linearGradient id="leafGrad2" x1="150" y1="210" x2="260" y2="60" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#14301d"/>
+                    <stop offset="1" stop-color="#2d5737"/>
+                </linearGradient>
+                <linearGradient id="leafGrad3" x1="90" y1="160" x2="210" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#2a5a36"/>
+                    <stop offset="1" stop-color="#699f78"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
 
-    <!-- Connect Frontend JavaScript -->
+    <div class="corner-leaf leaf-bottom-left" aria-hidden="true">
+        <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 280C70 260 130 200 140 130C100 140 50 170 0 280Z" fill="url(#leafGrad4)" opacity="0.85" filter="blur(2px)"/>
+            <path d="M0 200C60 180 110 120 100 50C65 70 25 110 0 200Z" fill="url(#leafGrad5)" opacity="0.75" filter="blur(3px)"/>
+            <path d="M60 280C100 240 150 180 170 110C130 130 80 170 60 280Z" fill="url(#leafGrad6)" opacity="0.5" filter="blur(5px)"/>
+            <defs>
+                <linearGradient id="leafGrad4" x1="140" y1="130" x2="0" y2="280" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#1d442a"/>
+                    <stop offset="0.7" stop-color="#39734a"/>
+                    <stop offset="1" stop-color="#649f75"/>
+                </linearGradient>
+                <linearGradient id="leafGrad5" x1="100" y1="50" x2="0" y2="200" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#163520"/>
+                    <stop offset="1" stop-color="#2e5d3a"/>
+                </linearGradient>
+                <linearGradient id="leafGrad6" x1="170" y1="110" x2="60" y2="280" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#285635"/>
+                    <stop offset="1" stop-color="#4f895f"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Main Application Page -->
+    <div class="page-container">
+        <!-- Navigation Header -->
+        <header class="navbar" id="topNavbar">
+            <div class="nav-brand" id="brandLogo">
+                <div class="brand-icon-wrapper">
+                    <svg class="brand-leaf-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 28C10 21 13 14 20 12C20 18 17 25 12 28Z" fill="#245133" />
+                        <path d="M22 30C19 22 22 10 32 6C34 16 29 27 22 30Z" fill="#1b4228" />
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Fitbees</span>
+                    <span class="brand-tagline">FUEL BETTER LIVE HIGHER</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active" data-nav="home">Home</a>
+                <a href="#nutrition" class="nav-link" data-nav="nutrition">Nutrition</a>
+                <a href="#community" class="nav-link" data-nav="community">Community</a>
+                <a href="#about" class="nav-link" data-nav="about">About</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button type="button" class="btn btn-login" id="loginBtn">Log In</button>
+                <button type="button" class="btn btn-signup" id="signupBtn">Sign Up</button>
+                <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <main class="hero-section">
+            <div class="hero-grid">
+                
+                <!-- Left Column: Value Prop & Features -->
+                <div class="hero-content">
+                    <div class="audience-badge">
+                        <span>FOR AGES 18 — 22</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        Upgrade<br>
+                        Your Mind.<br>
+                        <span class="accent-text">Build Your Body<span class="title-dot">.</span></span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Get personalized nutrition insights to help you stay consistent, feel stronger and become a better you.
+                    </p>
+
+                    <!-- Feature Cards Stack -->
+                    <div class="feature-cards-stack">
+                        <!-- Feature 1 -->
+                        <div class="feature-card" data-feature="eat-better" tabindex="0" role="button" aria-label="Eat Better feature card">
+                            <div class="feature-icon-wrapper icon-apple">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.63-.77 1.06-1.84.94-2.91-.91.04-2.02.61-2.67 1.38-.58.67-1.09 1.76-.95 2.81 1.02.08 2.05-.51 2.68-1.28z"/>
+                                </svg>
+                            </div>
+                            <div class="feature-text">
+                                <h2 class="feature-heading">Eat Better</h2>
+                                <p class="feature-sub">Make informed choices with simple nutrition reports.</p>
+                            </div>
+                            <div class="feature-arrow" aria-hidden="true">→</div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card" data-feature="energy" tabindex="0" role="button" aria-label="More Energy Everyday feature card">
+                            <div class="feature-icon-wrapper icon-energy">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.08-.13C8.44 10.82 10.92 6.53 14.64 3h1l-1 7h3.5c.49 0 .56.33.41.63l-.07.13-7.48 10.24z"/>
+                                </svg>
+                            </div>
+                            <div class="feature-text">
+                                <h2 class="feature-heading">More Energy Everyday</h2>
+                                <p class="feature-sub">Fuel your day and perform better in college, sports and life.</p>
+                            </div>
+                            <div class="feature-arrow" aria-hidden="true">→</div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card" data-feature="community" tabindex="0" role="button" aria-label="Supportive Community feature card">
+                            <div class="feature-icon-wrapper icon-community">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                </svg>
+                            </div>
+                            <div class="feature-text">
+                                <h2 class="feature-heading">Supportive Community</h2>
+                                <p class="feature-sub">Connect with like-minded individuals on the same journey.</p>
+                            </div>
+                            <div class="feature-arrow" aria-hidden="true">→</div>
+                        </div>
+                    </div>
+
+                    <!-- Handwritten Script Note (Bottom Left) -->
+                    <div class="doodle-note doodle-bottom-left">
+                        <span class="script-line-1">Better</span>
+                        <span class="script-line-2">Choices</span>
+                        <span class="script-line-3">Brighter</span>
+                        <span class="script-line-4">Days</span>
+                        <div class="script-underline">
+                            <svg viewBox="0 0 100 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 8C28 10 70 8 97 4" stroke="#255535" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M12 18C38 19 76 17 95 13" stroke="#255535" stroke-width="2.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Composition -->
+                <div class="hero-visual">
+                    <!-- Soft organic green curve backdrop -->
+                    <div class="organic-backdrop"></div>
+
+                    <div class="hero-media-card">
+                        <!-- Hero Photo -->
+                        <img src="assets/hero-couple.jpg" alt="Athletic couple standing on sunny rooftop in Fitbees athletic shirts" class="hero-image" id="heroImage">
+
+                        <!-- Handwritten Script Note (Top Right) -->
+                        <div class="doodle-note doodle-top-right">
+                            <div class="doodle-sparks">
+                                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5C13 10 14 16 11 22" stroke="#285a38" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M22 10C24 14 26 19 25 24" stroke="#285a38" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="script-text">
+                                <span class="script-word">Upgrade</span>
+                                <span class="script-word">Your Mind.</span>
+                                <span class="script-word bold-script">Build Your Body.</span>
+                            </div>
+                            <div class="script-underline-curved">
+                                <svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 6C40 9 85 9 116 4" stroke="#2c5c3a" stroke-width="2.6" stroke-linecap="round"/>
+                                    <path d="M25 15C55 17 88 16 112 11" stroke="#2c5c3a" stroke-width="2.4" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Stone Concrete Wall Badge (Bottom Right) -->
+                        <div class="discipline-badge">
+                            <span class="disc-line">DISCIPLINE</span>
+                            <span class="disc-line">CREATES</span>
+                            <span class="disc-line">FREEDOM</span>
+                        </div>
+
+                        <!-- Image View Switcher Pill -->
+                        <div class="view-switch-control" title="Toggle between Studio Shot and Original Reference">
+                            <button type="button" class="switch-btn active" id="btnShotStudio">Studio HD</button>
+                            <button type="button" class="switch-btn" id="btnShotMockup">Original Mockup</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Interactive Feature Modal -->
+    <div class="modal-overlay" id="featureModal" aria-hidden="true">
+        <div class="modal-card">
+            <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon"></div>
+                <div>
+                    <h3 id="modalTitle">Feature Title</h3>
+                    <p class="modal-subtitle" id="modalSubtitle">Category details</p>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamically populated via script.js -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-signup" id="modalCtaBtn">Get Started Free</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Log In / Sign Up) -->
+    <div class="modal-overlay" id="authModal" aria-hidden="true">
+        <div class="modal-card auth-card">
+            <button type="button" class="modal-close" id="authModalClose" aria-label="Close modal">&times;</button>
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" id="tabLogin">Log In</button>
+                <button type="button" class="auth-tab" id="tabSignup">Sign Up</button>
+            </div>
+            
+            <form id="authForm" class="auth-form" onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <label for="userEmail">College or Personal Email</label>
+                    <input type="email" id="userEmail" placeholder="you@university.edu" required>
+                </div>
+
+                <div class="form-group" id="goalField">
+                    <label for="primaryGoal">Primary Fitness & Diet Goal</label>
+                    <select id="primaryGoal">
+                        <option value="protein">Build Muscle & High Protein</option>
+                        <option value="energy">Clean Energy for Classes & Study</option>
+                        <option value="budget">Dorm Budget & Junk Food Control</option>
+                        <option value="lean">Stay Lean & Athletic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" id="userPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-signup btn-full" id="authSubmitBtn">Continue to Fitbees</button>
+            </form>
+            <p class="auth-note">Designed specifically for student athletes and busy campus life.</p>
+        </div>
+    </div>
+
+    <!-- Frontend Script -->
     <script src="script.js"></script>
 </body>
 </html>
