@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Halo — daily tasks</title>
+<title>Consistency — daily tasks</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="theme-color" content="#06070E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Halo">
+<meta name="apple-mobile-web-app-title" content="Consistency">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
@@ -114,6 +115,14 @@ button{cursor:pointer;background:none;border:0}
   border-color:rgba(255,180,73,.32);
   background:linear-gradient(158deg,rgba(255,180,73,.17),rgba(255,180,73,.05))}
 .ritual.show{display:flex}
+.nudge{display:none;gap:12px;align-items:center;padding:12px 18px;margin-bottom:16px;border-radius:16px;
+  border-color:var(--line);background:var(--glass-soft)}
+.nudge.show{display:flex}
+.nudge p{margin:0;font-size:13.5px;color:var(--ink-2);flex:1;min-width:0}
+.nudge p b{color:var(--ink);font-weight:500}
+.nudge .acts{display:flex;gap:8px;flex:none}
+.nudge .btn{padding:7px 14px;font-size:13px}
+@media(max-width:560px){.nudge{flex-wrap:wrap}.nudge .acts{width:100%}.nudge .acts .btn{flex:1}}
 .ritual .dot{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;
   background:rgba(255,180,73,.18);color:var(--amber)}
 .ritual .dot svg{width:17px;height:17px}
@@ -330,7 +339,7 @@ dialog::backdrop{background:rgba(3,4,10,.72);backdrop-filter:blur(6px)}
         <circle cx="12" cy="12" r="9" stroke="url(#ringgrad)" stroke-width="2.4"/>
         <path d="M8 12.4l2.7 2.6L16 9.6" stroke="#EAE7FF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <b>Halo</b><span id="syncNote">local</span>
+      <b>Consistency</b><span id="syncNote">local</span>
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button role="tab" data-view="today" aria-selected="true">Today</button>
@@ -343,6 +352,14 @@ dialog::backdrop{background:rgba(3,4,10,.72);backdrop-filter:blur(6px)}
       </svg>
     </button>
   </header>
+
+  <section class="glass nudge" id="notifNudge">
+    <p><b>Turn on notifications</b> so the Saturday and Sunday reminders actually reach you — they only fire while this is open, so this is the one setting worth switching on now.</p>
+    <div class="acts">
+      <button class="btn btn-primary" id="nudgeEnable">Turn on</button>
+      <button class="btn btn-ghost" id="nudgeDismiss">Not now</button>
+    </div>
+  </section>
 
   <section class="glass hero">
     <div class="hero-txt">
@@ -370,7 +387,7 @@ dialog::backdrop{background:rgba(3,4,10,.72);backdrop-filter:blur(6px)}
   </section>
 
   <section class="glass ritual dusk" id="review">
-    <span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round">
+    <span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></span>
     <p><b>Sunday night</b><span>Look back at the week before it closes — it takes a minute.</span></p>
     <div class="acts">
@@ -512,7 +529,7 @@ dialog::backdrop{background:rgba(3,4,10,.72);backdrop-filter:blur(6px)}
 <dialog id="settingsDialog">
   <form method="dialog" class="glass sheet">
     <h3>Reminders and data</h3>
-    <p class="hint">Two nudges a week: Saturday from 11am to plan, Sunday from 8pm to look back.</p>
+    <p class="hint">Two nudges a week: Saturday from 11am to plan, Sunday from 8pm to look back. These only reach you while this page is open in a tab or installed window — there's no background server sending them, so it's worth keeping a tab open or pinned around those times. On iPhone, notifications only work once you've added this to your Home Screen.</p>
     <div class="settings-row">
       <div><b>System notifications</b><small id="notifState">Checking…</small></div>
       <button class="btn" type="button" id="notifBtn">Turn on</button>
@@ -604,7 +621,7 @@ function applyWeeklyPalette(){
 
 /* ---------------- state ---------------- */
 const state = { days:{}, weeks:{}, view:"today", filter:"all", prio:"soon", ready:false };
-const LS_DAYS = "halo.days.v1", LS_WEEKS = "halo.weeks.v1", LS_FLAGS = "halo.flags.v1";
+const LS_DAYS = "consistency.days.v1", LS_WEEKS = "consistency.weeks.v1", LS_FLAGS = "consistency.flags.v1";
 
 let db = null;
 const writeChain = new Map();
@@ -646,6 +663,7 @@ async function boot(){
   ensureToday();
   renderAll();
   startClock();
+  maybeShowNudge();
 
   try {
     db = window.claude ? await window.claude.use("db") : null;
@@ -677,7 +695,7 @@ function ensureToday(){
 }
 
 // Unfinished work from the most recent day that had a list. Nothing moves
-// until you say so; once you answer, Halo stops asking for the rest of the day.
+// until you say so; once you answer, Consistency stops asking for the rest of the day.
 function pendingCarry(){
   const k = todayKey();
   if(flags.carryHandled === k) return null;
@@ -1034,20 +1052,20 @@ function checkRitual(){
   $("#ritual").classList.toggle("show", planDue && flags.snoozeWeek !== wk);
   if(planDue && flags.notifiedWeek !== wk){
     setFlag("notifiedWeek", wk);
-    fireNotification("Halo — plan your week", "It's Saturday past 11. Set the tasks that matter for the week ahead.", openFocusDialog);
+    fireNotification("Consistency — plan your week", "It's Saturday past 11. Set the tasks that matter for the week ahead.", openFocusDialog);
   }
 
   const revDue = reviewDue();
   $("#review").classList.toggle("show", revDue && flags.reviewSnooze !== wk);
   if(revDue && flags.notifiedReview !== wk){
     setFlag("notifiedReview", wk);
-    fireNotification("Halo — how did the week go?", "Sunday night. Take a minute to look back before the week closes.", openReviewDialog);
+    fireNotification("Consistency — how did the week go?", "Sunday night. Take a minute to look back before the week closes.", openReviewDialog);
   }
 }
 function fireNotification(title, body, onClick){
   try {
     if(typeof Notification !== "undefined" && Notification.permission === "granted"){
-      const n = new Notification(title, {body, tag:"halo-"+title});
+      const n = new Notification(title, {body, tag:"consistency-"+title});
       n.onclick = () => { window.focus(); if(onClick) onClick(); };
       return;
     }
@@ -1146,6 +1164,32 @@ reviewDialog.addEventListener("close", ()=>{
 $("#reviewGo").addEventListener("click", openReviewDialog);
 $("#reviewLater").addEventListener("click", ()=>{ setFlag("reviewSnooze", weekKey(new Date())); checkRitual(); toast("Hidden until next Sunday"); });
 
+/* ---------------- notification permission ---------------- */
+async function requestNotifPermission(){
+  if(typeof Notification === "undefined") return "unsupported";
+  if(Notification.permission !== "default") return Notification.permission;
+  try { return await Notification.requestPermission(); }
+  catch(e){ return "denied"; }
+}
+
+function maybeShowNudge(){
+  const bar = $("#notifNudge");
+  const seen = flags.notifNudgeSeen;
+  const supported = typeof Notification !== "undefined";
+  if(!supported || seen || Notification.permission !== "default"){ bar.classList.remove("show"); return; }
+  bar.classList.add("show");
+}
+$("#nudgeEnable").addEventListener("click", async ()=>{
+  const res = await requestNotifPermission();
+  setFlag("notifNudgeSeen", true);
+  $("#notifNudge").classList.remove("show");
+  toast(res==="granted" ? "Reminders are on" : "Not enabled — the in-app banners will still show while you have the app open");
+});
+$("#nudgeDismiss").addEventListener("click", ()=>{
+  setFlag("notifNudgeSeen", true);
+  $("#notifNudge").classList.remove("show");
+});
+
 /* ---------------- settings ---------------- */
 const settingsDialog = $("#settingsDialog");
 function refreshNotifState(){
@@ -1155,9 +1199,9 @@ function refreshNotifState(){
     btn.classList.add("hide"); return;
   }
   if(Notification.permission === "granted"){
-    el.textContent = "On. You'll get a notification on Saturday from 11am and Sunday from 8pm, while Halo is open in a tab.";
+    el.textContent = "On. You'll get a notification on Saturday from 11am and Sunday from 8pm, while Consistency is open in a tab.";
     btn.textContent = "Send a test";
-    btn.onclick = () => fireNotification("Halo — test", "Reminders are working. This is what Saturday and Sunday will look like.");
+    btn.onclick = () => fireNotification("Consistency — test", "Reminders are working. This is what Saturday and Sunday will look like.");
   } else if(Notification.permission === "denied"){
     el.textContent = "Blocked by the browser. Allow notifications for this page in your browser settings, or rely on the in-app banner.";
     btn.classList.add("hide");
@@ -1165,11 +1209,9 @@ function refreshNotifState(){
     el.textContent = "Off. Turn it on to get notifications on Saturday and Sunday.";
     btn.textContent = "Turn on";
     btn.onclick = async () => {
-      try {
-        const res = await Notification.requestPermission();
-        if(res === "granted") toast("Saturday reminders are on");
-        else toast("Not allowed — the in-app banner will still appear");
-      } catch(e){ toast("This page can't ask for notifications. The in-app banner still works."); }
+      const res = await requestNotifPermission();
+      setFlag("notifNudgeSeen", true);
+      toast(res === "granted" ? "Reminders are on" : "Not allowed — the in-app banner will still appear");
       refreshNotifState();
     };
   }
@@ -1188,7 +1230,7 @@ $("#exportBtn").addEventListener("click", async ()=>{
   let saved = false;
   try {
     const downloads = window.claude ? await window.claude.use("downloads") : null;
-    if(downloads){ await downloads.save({filename:"halo-export-"+todayKey()+".json", data:payload}); saved = true; }
+    if(downloads){ await downloads.save({filename:"consistency-export-"+todayKey()+".json", data:payload}); saved = true; }
   } catch(e){}
   if(!saved){
     try {
@@ -1245,6 +1287,7 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   });
 }
+
 })();
 </script>
 </body>

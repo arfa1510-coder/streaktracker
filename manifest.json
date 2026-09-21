@@ -1,6 +1,6 @@
 {
-  "name": "Halo — daily tasks",
-  "short_name": "Halo",
+  "name": "Consistency — daily tasks",
+  "short_name": "Consistency",
   "description": "Daily to-do list tracker with dark glassmorphic UI and weekly rituals.",
   "start_url": "./index.html",
   "display": "standalone",

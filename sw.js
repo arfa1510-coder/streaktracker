@@ -1,5 +1,5 @@
 // Halo — minimal offline cache. Bump CACHE when you redeploy so clients pick up changes.
-const CACHE = "halo-v1";
+const CACHE = "consistency-v1";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
